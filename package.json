@@ -1,0 +1,50 @@
+{
+  "name": "curriculum-vitae",
+  "version": "1.0.0",
+  "description": "Membuat curriculum vitae dari sisi back end",
+  "main": "server.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development nodemon server.js",
+    "dev-resync": "cross-env NODE_ENV=dev-resync && npx sequelize-cli db:drop --env development --config ./src/config/config.json && npx sequelize-cli db:create --env development --config ./src/config/config.json && npx sequelize-cli db:migrate --env development --config ./src/config/config.json && nodemon server.js",
+    "db:migrate": "npx sequelize-cli migration:generate --name create-user && npx sequelize-cli migration:generate --name create-refreshToken && npx sequelize-cli migration:generate --name create-account && npx sequelize-cli migration:generate --name create-certificate && npx sequelize-cli migration:generate --name create-education && npx sequelize-cli migration:generate --name create-intership && npx sequelize-cli migration:generate --name create-portofolio && npx sequelize-cli migration:generate --name create-project && npx sequelize-cli migration:generate --name create-skill",
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
+    "test-resync": "cross-env NODE_ENV=test-resync && npx sequelize-cli db:drop --env test --config ./src/config/config.json && npx sequelize-cli db:create --env test --config ./src/config/config.json && npx sequelize-cli db:migrate --env test --config ./src/config/config.json && jest --testTimeout=10000"
+  },
+  "author": "Arif Fajar Pangestu",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.1.4",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.8.0",
+    "express-session": "^1.18.0",
+    "express-validator": "^7.0.1",
+    "file-type": "^18.5.0",
+    "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.0",
+    "mime-types": "^2.1.35",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.11",
+    "nodemon": "^2.0.22",
+    "otplib": "^12.0.1",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "pg": "^8.11.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.32.0",
+    "sharp": "^0.32.1",
+    "speakeasy": "^2.0.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.3",
+    "uuid": "^9.0.0",
+    "winston": "^3.9.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^29.5.0",
+    "sequelize-cli": "^6.6.1",
+    "sequelize-test-helpers": "^1.4.3",
+    "supertest": "^6.3.3"
+  }
+}

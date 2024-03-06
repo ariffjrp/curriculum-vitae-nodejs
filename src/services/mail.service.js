@@ -1,6 +1,6 @@
 require('dotenv').config();
 const transports = require('../config/mail.config');
-const { logger } = require('../utils/logger.js');
+const { logger } = require('../utils/logger');
 
 class MailService {
   static async sendEmail(to, subject, message) {

@@ -1,4 +1,3 @@
-// middleware/jail.js
 const MaxRetry = require('express-rate-limit');
 
 const Jail = MaxRetry({

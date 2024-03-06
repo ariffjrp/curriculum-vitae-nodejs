@@ -1,0 +1,21 @@
+{
+    "env": {
+        "commonjs": true,
+        "browser": true,
+        "es2021": true,
+        "node": true 
+    },
+    "extends" : [
+        "airbnb-base"
+    ],
+    "globals": {
+        "atomics" : "readonly",
+        "SharedArrayBuffer" : "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "rules": {
+    }
+}

@@ -1,9 +1,6 @@
-'use strict';
 const { Model } = require('sequelize');
 const { v4: uuidv4 } = require('uuid');
-const config = require('../config/auth.config.js');
-const sequelize = require('../config/db.config.js');
-const User = require('./user.model.js');
+const config = require('../config/auth.config');
 
 module.exports = (sequelize, DataTypes) => {
   class RefreshToken extends Model {
@@ -16,13 +13,13 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     static async createToken(user) {
-      let expiredAt = new Date();
+      const expiredAt = new Date();
       expiredAt.setSeconds(expiredAt.getSeconds() + config.jwtRefreshExpiration);
 
-      let token = uuidv4();
+      const token = uuidv4();
 
-      let refreshToken = await RefreshToken.create({
-        token: token,
+      const refreshToken = await RefreshToken.create({
+        token,
         userId: user.id,
         expiryDate: expiredAt,
       });
@@ -52,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'RefreshToken',
-    }
+    },
   );
 
   return RefreshToken;

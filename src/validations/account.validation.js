@@ -23,5 +23,5 @@ const updateAccountSchema = joi.object({
 });
 
 module.exports = {
-    updateAccountSchema,
+  updateAccountSchema,
 };

@@ -55,12 +55,14 @@ const updatePasswordSchema = joi.object({
 });
 
 const updateUsernameSchema = joi.object({
-  newUsername: joi.string().alphanum().min(3).max(30).required().messages({
-    'string.alphanum': 'Username should only contain alphanumeric characters',
-    'string.min': 'Username should have a minimum length of {#limit} characters',
-    'string.max': 'Username should have a maximum length of {#limit} characters',
-    'any.required': 'Username is required',
-  }),
+  newUsername: joi.string().alphanum().min(3).max(30)
+    .required()
+    .messages({
+      'string.alphanum': 'Username should only contain alphanumeric characters',
+      'string.min': 'Username should have a minimum length of {#limit} characters',
+      'string.max': 'Username should have a maximum length of {#limit} characters',
+      'any.required': 'Username is required',
+    }),
 });
 
 const deleteAccountSchema = joi.object({

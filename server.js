@@ -38,6 +38,7 @@ require('./src/routes/education.route.js')(app)
 require('./src/routes/skill.route.js')(app)
 require('./src/routes/certificate.route.js')(app)
 require('./src/routes/intership.route.js')(app)
+require('./src/routes/auth.route.js')(app)
 
 if (process.env.NODE_ENV == "development") {
   db.sequelize.sync();

@@ -1,11 +1,11 @@
-const controller = require('../controllers/user.controller.js');
+const controller = require('../controllers/user.controller');
 const authJWT = require('../middleware/authJWT');
 
 module.exports = function (app) {
-  app.use(function (req, res, next) {
+  app.use((req, res, next) => {
     res.header(
-      "Access-Control-Allow-Headers",
-      "x-access-token, Origin, Content-Type, Accept"
+      'Access-Control-Allow-Headers',
+      'x-access-token, Origin, Content-Type, Accept',
     );
     next();
   });
@@ -23,7 +23,7 @@ module.exports = function (app) {
    *       in: header
    *       description: User's access token
    *       required: true
-   *       type: string 
+   *       type: string
    *     responses:
    *       200:
    *         description: Log Out successfully.
@@ -71,7 +71,7 @@ module.exports = function (app) {
    *       in: header
    *       description: User's access token
    *       required: true
-   *       type: string 
+   *       type: string
    *     responses:
    *       200:
    *          description: User was updated password successfully
@@ -129,7 +129,7 @@ module.exports = function (app) {
    *                    description: result message
    *                    example: Gagal mengambil data pengguna. Harap periksa log aplikasi.
    */
-  app.patch("/api/users/updatePassword", [authJWT.verifyToken], controller.updatePassword);
+  app.patch('/api/users/updatePassword', [authJWT.verifyToken], controller.updatePassword);
 
   /**
    * @swagger
@@ -155,7 +155,7 @@ module.exports = function (app) {
    *       in: header
    *       description: User's access token
    *       required: true
-   *       type: string 
+   *       type: string
    *     responses:
    *       200:
    *          description: User was updated Username successfully
@@ -191,7 +191,7 @@ module.exports = function (app) {
    *                    description: result message
    *                    example: Failed to fetch user data. Please check application logs.
    */
-  app.patch("/api/users/updateUsername", [authJWT.verifyToken], controller.updateUsername);
+  app.patch('/api/users/updateUsername', [authJWT.verifyToken], controller.updateUsername);
 
   /**
    * @swagger

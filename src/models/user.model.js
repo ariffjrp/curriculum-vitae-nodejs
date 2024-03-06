@@ -1,24 +1,22 @@
-'use strict';
 const { Model } = require('sequelize');
-const sequelize = require('../config/db.config.js');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    static associate(models) {
-      const Account = sequelize.models.Account;
-      const RefreshToken = sequelize.models.RefreshToken;
-      const Portofolio = sequelize.models.Portofolio;
-      const Certificate = sequelize.models.Certificate;
-      const Education = sequelize.models.Education;
-      const Intership = sequelize.models.Intership;
-      const Skill = sequelize.models.Skill;
-      const Project = sequelize.models.Project;
-      
+    static associate() {
+      const { Account } = sequelize.models;
+      const { RefreshToken } = sequelize.models;
+      const { Portofolio } = sequelize.models;
+      const { Certificate } = sequelize.models;
+      const { Education } = sequelize.models;
+      const { Intership } = sequelize.models;
+      const { Skill } = sequelize.models;
+      const { Project } = sequelize.models;
+
       this.hasOne(RefreshToken, {
         foreignKey: 'userId',
         targetKey: 'id',
       });
-      
+
       this.hasOne(Account, {
         foreignKey: 'userId',
         targetKey: 'id',
@@ -38,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId',
         targetKey: 'id',
       });
-      
+
       this.hasMany(Intership, {
         foreignKey: 'userId',
         targetKey: 'id',
@@ -86,7 +84,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: 'User',
       paranoid: true,
-    }
+    },
   );
 
   return User;

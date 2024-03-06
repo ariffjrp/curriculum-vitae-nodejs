@@ -1,11 +1,11 @@
-const controller = require('../controllers/account.controller.js');
+const controller = require('../controllers/account.controller');
 const authJWT = require('../middleware/authJWT');
 
 module.exports = function (app) {
-  app.use(function (req, res, next) {
+  app.use((req, res, next) => {
     res.header(
-      "Access-Control-Allow-Headers",
-      "x-access-token, Origin, Content-Type, Accept"
+      'Access-Control-Allow-Headers',
+      'x-access-token, Origin, Content-Type, Accept',
     );
     next();
   });
@@ -69,8 +69,8 @@ module.exports = function (app) {
    *                   description: Error message.
    *                   example: Failed to process avatar. Please try again later.
    */
-  app.post('/api/account/update/avatar', [authJWT.verifyToken], controller.uploadAvatar)
-  
+  app.post('/api/account/update/avatar', [authJWT.verifyToken], controller.uploadAvatar);
+
   /**
    * @swagger
    * /api/account/avatar:
@@ -124,7 +124,7 @@ module.exports = function (app) {
    *                   description: Error message.
    *                   example: Failed to fetch avatar. Please try again later.
    */
-  app.get('/api/account/avatar', [authJWT.verifyToken], controller.getAvatar)
+  app.get('/api/account/avatar', [authJWT.verifyToken], controller.getAvatar);
 
   /**
    * @swagger
@@ -193,7 +193,7 @@ module.exports = function (app) {
    *                  description: Application error.
    *                  example: Failed to retrieve account. Please check application log.
    */
-  app.get('/api/account', [authJWT.verifyToken], controller.getAbout)
+  app.get('/api/account', [authJWT.verifyToken], controller.getAbout);
 
   /**
    * @swagger
@@ -243,7 +243,7 @@ module.exports = function (app) {
    *       in: header
    *       description: User's access token
    *       required: true
-   *       type: string 
+   *       type: string
    *     responses:
    *       200:
    *          description: Account updated successfully.
@@ -268,5 +268,5 @@ module.exports = function (app) {
    *                    description: result message
    *                    example: Failed to retrieve account data. Please check the application log.
    */
-  app.patch('/api/account/update', [authJWT.verifyToken], controller.updateAccount)
-}
+  app.patch('/api/account/update', [authJWT.verifyToken], controller.updateAccount);
+};

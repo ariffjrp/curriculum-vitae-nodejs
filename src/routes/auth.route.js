@@ -1,12 +1,12 @@
 const { verifyUser } = require('../middleware');
-const controller = require('../controllers/auth.controller.js');
-const MaxRetry = require('../utils/MaxRetry.js')
+const controller = require('../controllers/auth.controller');
+const MaxRetry = require('../utils/MaxRetry');
 
 module.exports = function (app) {
-  app.use(function (req, res, next) {
+  app.use((req, res, next) => {
     res.header(
-      "Access-Control-Allow-Headers",
-      "x-access-token, Origin, Content-Type, Accept"
+      'Access-Control-Allow-Headers',
+      'x-access-token, Origin, Content-Type, Accept',
     );
     next();
   });
@@ -70,19 +70,19 @@ module.exports = function (app) {
    *                   description: Result message.
    *                   example: Failed to create user. Please check application log.
    */
-  app.post("/api/register", [verifyUser.checkDuplicateUsername], controller.register);
+  app.post('/api/register', [verifyUser.checkDuplicateUsername], controller.register);
 
-  app.post("/api/sendEmail", controller.sendOTPByEmail);
+  app.post('/api/sendEmail', controller.sendOTPByEmail);
 
-  app.post("/api/verifyEmail", controller.verifyEmail);
+  app.post('/api/verifyEmail', controller.verifyEmail);
 
-  app.get("/auth/google", controller.autentikasiOAuth2);
-  
-  app.get("/login/oauth2/code/google", controller.callbackautentikasiOauth2);
+  app.get('/auth/google', controller.autentikasiOAuth2);
 
-  app.post("/auth/resetPassword", controller.resetPassword)
+  app.get('/login/oauth2/code/google', controller.callbackautentikasiOauth2);
 
-  app.post("/confirm-reset-password", controller.confirmResetPassword)
+  app.post('/auth/resetPassword', controller.resetPassword);
+
+  app.post('/confirm-reset-password', controller.confirmResetPassword);
 
   /**
    * @swagger
@@ -119,7 +119,7 @@ module.exports = function (app) {
    *                   type: string
    *                   description: User's refresh token.
    *                   example: 9ad656a6-4c90-4701-8cd1-2d65ff08a0ae
-   * 
+   *
    *       400:
    *         description: Refresh token is not in database!
    *         content:
@@ -165,7 +165,7 @@ module.exports = function (app) {
    *                   description: Result message.
    *                   example: Failed to generate access token. Please check application log.
    */
-  app.post("/api/users/refreshToken", controller.refreshToken);
+  app.post('/api/users/refreshToken', controller.refreshToken);
 
   /**
    * @swagger
@@ -248,5 +248,5 @@ module.exports = function (app) {
    *                  description: Application error.
    *                  example: Failed to login. Please check application log.
    */
-  app.post("/api/login", MaxRetry ,controller.login);
+  app.post('/api/login', MaxRetry, controller.login);
 };

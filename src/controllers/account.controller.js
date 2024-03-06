@@ -1,9 +1,10 @@
-const { updateAccountSchema } = require('../validations/account.validation.js');
-const db = require('../models');
-const { logger } = require('../utils/logger.js');
 const multer = require('multer');
 const sharp = require('sharp');
 const mime = require('mime-types');
+const { updateAccountSchema } = require('../validations/account.validation');
+const db = require('../models');
+const { logger } = require('../utils/logger');
+
 const { Account } = db;
 
 class AccountController {
@@ -15,7 +16,9 @@ class AccountController {
       return res.status(400).json({ message: errorMessage });
     }
 
-    const { name, email, address, phone, birthdate, gender, bio } = req.body;
+    const {
+      name, email, address, phone, birthdate, gender, bio,
+    } = req.body;
 
     Account.findOne({
       where: {
@@ -24,7 +27,7 @@ class AccountController {
     })
       .then((account) => {
         if (!account) {
-          logger.warn(`Account not found`);
+          logger.warn('Account not found');
           return res.status(404).send({
             message: 'Account not found.',
           });
@@ -64,7 +67,7 @@ class AccountController {
   static async uploadAvatar(req, res) {
     const storage = multer.memoryStorage();
     const upload = multer({
-      storage: storage,
+      storage,
       limits: {
         fileSize: 2 * 1024 * 1024,
       },

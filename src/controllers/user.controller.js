@@ -1,9 +1,10 @@
 require('dotenv').config();
 const { validationResult } = require('express-validator');
-const db = require('../models');
 const bcrypt = require('bcryptjs');
+const db = require('../models');
 const { logger } = require('../utils/logger');
-const { Account, User} = db;
+
+const { Account, User } = db;
 
 class UserController {
   static async updatePassword(req, res) {
@@ -17,7 +18,7 @@ class UserController {
     const { oldPassword, newPassword, repeatPassword } = req.body;
 
     if (newPassword !== repeatPassword) {
-      logger.warn(`New password and confirm password do not match.`);
+      logger.warn('New password and confirm password do not match.');
       return res.status(400).send({
         message: 'New password and confirm password do not match.',
       });
@@ -101,7 +102,7 @@ class UserController {
             where: {
               id: req.userId,
             },
-          }
+          },
         )
           .then(() => {
             res.status(200).send({
@@ -141,7 +142,7 @@ class UserController {
   }
 
   static async deleteAccount(req, res) {
-    const userId = req.userId; // Get user ID from access token
+    const { userId } = req; // Get user ID from access token
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

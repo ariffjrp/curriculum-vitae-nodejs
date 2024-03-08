@@ -69,7 +69,7 @@ module.exports = function (app) {
    *                   description: Error message.
    *                   example: Failed to process avatar. Please try again later.
    */
-  app.post('/api/account/update/avatar', [authJWT.verifyToken], controller.uploadAvatar);
+  app.post('/v1/api/account/update/avatar', [authJWT.verifyToken], controller.uploadAvatar);
 
   /**
    * @swagger
@@ -124,7 +124,7 @@ module.exports = function (app) {
    *                   description: Error message.
    *                   example: Failed to fetch avatar. Please try again later.
    */
-  app.get('/api/account/avatar', [authJWT.verifyToken], controller.getAvatar);
+  app.get('/v1/api/account/avatar', [authJWT.verifyToken], controller.getAvatar);
 
   /**
    * @swagger
@@ -193,7 +193,7 @@ module.exports = function (app) {
    *                  description: Application error.
    *                  example: Failed to retrieve account. Please check application log.
    */
-  app.get('/api/account', [authJWT.verifyToken], controller.getAbout);
+  app.get('/v1/api/account', [authJWT.verifyToken], controller.getAbout);
 
   /**
    * @swagger
@@ -268,5 +268,5 @@ module.exports = function (app) {
    *                    description: result message
    *                    example: Failed to retrieve account data. Please check the application log.
    */
-  app.patch('/api/account/update', [authJWT.verifyToken], controller.updateAccount);
+  app.patch('/v1/api/account/update', [authJWT.verifyToken], controller.updateAccount);
 };

@@ -1,9 +1,9 @@
 require('dotenv').config();
-const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('../models');
 const config = require('../config/auth.config');
+const { registerSchema, loginSchema } = require('../validations/user.validation');
 const { logger } = require('../utils/logger');
 
 const { Account, User, RefreshToken } = db;
@@ -13,24 +13,24 @@ const MailService = require('../services/mail.service');
 
 class AuthController {
   static async register(req, res) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      const errorMessage = errors.array()[0].msg;
+    const {
+      email, password, repeatPassword, name, address, phone, birthdate, gender, bio,
+    } = req.body;
+
+    const { error } = registerSchema.validate(req.body);
+    if (error) {
+      const errorMessage = error.details[0].message;
       logger.warn(`Error occurred: ${errorMessage}`);
       return res.status(400).json({ message: errorMessage });
     }
-
-    const {
-      email, password, repeatPassword, name, address, phone, birthdate, gender,
-    } = req.body;
 
     try {
       const existingUser = await User.findOne({ where: { email } });
       if (existingUser) {
         return res.status(400).json({ message: 'Email already exists.' });
       }
-    } catch (error) {
-      logger.error(`Failed to check existing user: ${error.message}`);
+    } catch (err) {
+      logger.error(`Failed to check existing user: ${err.message}`);
       return res.status(500).json({ message: 'Failed to register user.' });
     }
 
@@ -55,14 +55,15 @@ class AuthController {
         phone,
         birthdate,
         gender,
+        bio,
         secret,
       };
 
       res.status(200).send({
         message: 'Registration data saved successfully!',
       });
-    } catch (error) {
-      logger.error(`Failed to generate secret: ${error.message}`);
+    } catch (err) {
+      logger.error(`Failed to generate secret: ${err.message}`);
       res.status(500).send({ message: 'Failed to generate secret.' });
     }
   }
@@ -126,14 +127,25 @@ class AuthController {
         phone: registrationData.phone,
         birthdate: registrationData.birthdate,
         gender: registrationData.gender,
+        bio: registrationData.bio,
         userId: user.id,
       });
 
       delete req.session.registrationData;
 
+      const token = jwt.sign({ id: user.id }, config.secret, {
+        expiresIn: config.jwtExpiration,
+      });
+
+      const refreshToken = await RefreshToken.createToken(user);
+
       res.status(201).send({
+        id: user.id,
         message: 'User was created successfully!',
         user,
+        username: user.username,
+        accessToken: token,
+        refreshToken,
       });
     } catch (err) {
       console.error('Error occurred during email verification:', err);
@@ -200,54 +212,41 @@ class AuthController {
   }
 
   static async login(req, res) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      const errorMessage = errors.array()[0].msg;
-      logger.warn(`Error occurred: ${errorMessage}`);
-      return res.status(400).json({ message: errorMessage });
-    }
+    try {
+      const { error } = loginSchema.validate(req.body);
+      if (error) {
+        const errorMessage = error.details[0].message;
+        logger.warn(`Error occurred: ${errorMessage}`);
+        return res.status(400).json({ message: errorMessage });
+      }
 
-    User.findOne({
-      where: {
-        email: req.body.email,
-      },
-    })
-      .then(async (user) => {
-        if (!user) {
-          logger.warn('Username is not registered. Check the username again.');
-          return res.status(400).send({
-            message: 'Username is not registered. Check the username again.',
-          });
-        }
+      const { email, password } = req.body;
+      const user = await User.findOne({ where: { email } });
 
-        const passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
+      if (!user) {
+        logger.warn('Email is not registered. Check the email again.');
+        return res.status(400).json({ message: 'Email is not registered. Check the email again.' });
+      }
 
-        if (!passwordIsValid) {
-          logger.warn('Invalid password!');
-          return res.status(401).send({
-            message: 'Invalid Password!',
-          });
-        }
+      const passwordIsValid = bcrypt.compareSync(password, user.password);
+      if (!passwordIsValid) {
+        logger.warn('Invalid password!');
+        return res.status(401).json({ message: 'Invalid Password!' });
+      }
 
-        const token = jwt.sign({ id: user.id }, config.secret, {
-          expiresIn: config.jwtExpiration,
-        });
+      const token = jwt.sign({ id: user.id }, config.secret, { expiresIn: config.jwtExpiration });
+      const refreshToken = await RefreshToken.createToken(user);
 
-        const refreshToken = await RefreshToken.createToken(user);
-
-        res.status(200).send({
-          id: user.id,
-          username: user.username,
-          accessToken: token,
-          refreshToken,
-        });
-      })
-      .catch((err) => {
-        logger.error(err.message);
-        res.status(500).send({
-          message: 'Failed to login. Please check application log.',
-        });
+      res.status(200).json({
+        id: user.id,
+        username: user.username,
+        accessToken: token,
+        refreshToken,
       });
+    } catch (err) {
+      logger.error(err.message);
+      res.status(500).json({ message: 'Failed to login. Please check application log.' });
+    }
   }
 
   static autentikasiOAuth2(req, res, next) {
@@ -255,7 +254,7 @@ class AuthController {
   }
 
   static callbackautentikasiOauth2(req, res) {
-    passport.authenticate('google', { failureRedirect: '/api/login' })(req, res, async () => {
+    passport.authenticate('google', { failureRedirect: '/v1/api/auth/register' })(req, res, async () => {
       logger.info('User data:', req.user);
       if (!req.user) {
         return res.status(401).send('Authentication failed');
@@ -295,7 +294,7 @@ class AuthController {
       );
 
       const subject = 'Your Reset Password';
-      const message = `Your link is: http://localhost:8000/auth/reset-password?token=${resetToken}`;
+      const message = `Your link is: http://localhost:8000/v1/api/auth/confirm-reset-password?resetToken=${resetToken}`;
 
       await MailService.sendEmail(email, subject, message);
 

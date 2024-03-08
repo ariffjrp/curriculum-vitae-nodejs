@@ -2,12 +2,20 @@ const db = require('../models');
 
 const { Skill } = db;
 const { logger } = require('../utils/logger');
+const { CreateSkills } = require('../validations/skill.validation');
 
 class SkillController {
   static async CreateSkill(req, res) {
     const { Name } = req.body;
 
     const { userId } = req;
+
+    const { error } = CreateSkills.validate(req.body);
+    if (error) {
+      const errorMessage = error.details[0].message;
+      logger.warn(`Error occurred: ${errorMessage}`);
+      return res.status(400).json({ message: errorMessage });
+    }
 
     Skill.create({
       Name,

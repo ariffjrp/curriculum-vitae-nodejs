@@ -81,23 +81,23 @@ class UserController {
       return res.status(400).json({ message: errorMessage });
     }
 
-    const { newUsername } = req.body;
+    const { email } = req.body;
 
     User.findOne({
       where: {
-        username: newUsername,
+        email,
       },
     })
-      .then((user) => {
-        if (user) {
-          logger.warn('Username already exists.');
+      .then(() => {
+        if (email) {
+          logger.warn('Email already exists.');
           return res.status(400).send({
-            message: 'Username already exists.',
+            message: 'Email already exists.',
           });
         }
 
         db.User.update(
-          { username: newUsername },
+          { email },
           {
             where: {
               id: req.userId,
@@ -144,67 +144,30 @@ class UserController {
   static async deleteAccount(req, res) {
     const { userId } = req; // Get user ID from access token
 
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      const errorMessage = errors.array()[0].msg;
-      logger.warn(`Error occurred: ${errorMessage}`);
-      return res.status(400).json({ message: errorMessage });
-    }
+    try {
+      const user = await User.findByPk(userId);
 
-    const { username } = req.body; // Get username from request
-
-    User.findOne({
-      where: {
-        id: userId,
-      },
-      include: [Account], // Include Account model
-    })
-      .then((user) => {
-        if (!user) {
-          logger.warn('User not found.');
-          return res.status(404).send({
-            message: 'User not found.',
-          });
-        }
-
-        // Verify the username
-        if (user.username !== username) {
-          logger.warn('Invalid username. Please enter your username correctly.');
-          return res.status(400).send({
-            message: 'Invalid username. Please enter your username correctly.',
-          });
-        }
-
-        // Periksa apakah data sudah melewati batas waktu yang Anda tentukan
-        if (user.deletedAt && new Date() - user.deletedAt > (5 * 60 * 1000)) {
-          return res.status(400).send({
-            message: 'Masa pemulihan data telah berakhir.',
-          });
-        }
-
-        User.destroy({
-          where: {
-            id: userId,
-          },
-        })
-          .then(() => {
-            res.status(200).send({
-              message: 'Account deleted successfully.',
-            });
-          })
-          .catch((err) => {
-            logger.error(err.message);
-            res.status(500).send({
-              message: 'Failed to delete account. Please try again later.',
-            });
-          });
-      })
-      .catch((err) => {
-        logger.error(err.message);
-        res.status(500).send({
-          message: 'Failed to find user. Please try again later.',
+      if (!user) {
+        logger.warn('User not found.');
+        return res.status(404).send({
+          message: 'User not found.',
         });
+      }
+
+      user.deleted_at = new Date();
+      await user.save();
+
+      logger.info('user deleted ad', user);
+
+      res.status(200).send({
+        message: 'Account marked for deletion. It will be permanently deleted after the recovery period.',
       });
+    } catch (err) {
+      logger.error(err.message);
+      res.status(500).send({
+        message: 'Failed to mark account for deletion. Please try again later.',
+      });
+    }
   }
 }
 

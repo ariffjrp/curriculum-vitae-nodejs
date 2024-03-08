@@ -45,6 +45,9 @@ module.exports = (sequelize, DataTypes) => {
       expiryDate: {
         type: DataTypes.DATE,
       },
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     },
     {
       sequelize,

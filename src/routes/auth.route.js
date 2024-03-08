@@ -13,10 +13,10 @@ module.exports = function (app) {
 
   /**
    * @swagger
-   * /api/users/register:
+   * /v1/api/auth/register:
    *   post:
    *     tags:
-   *       - User Management
+   *       - Auth Management
    *     summary: Register new account user
    *     description: Register new account user
    *     requestBody:
@@ -26,10 +26,6 @@ module.exports = function (app) {
    *           schema:
    *             type: object
    *             properties:
-   *               username:
-   *                 type: string
-   *                 description: New user username
-   *                 example: JonoBakri234
    *               email:
    *                 type: string
    *                 description: New user email address
@@ -46,6 +42,22 @@ module.exports = function (app) {
    *                 type: string
    *                 description: New user username
    *                 example: Jono Bakri
+   *               address:
+   *                 type: string
+   *                 description: New user address
+   *                 example: jln jono
+   *               phone:
+   *                 type: string
+   *                 description: New user phone
+   *                 example: 12345678905678
+   *               gender:
+   *                 type: string
+   *                 description: New user gender
+   *                 example: man
+   *               bio:
+   *                 type: string
+   *                 description: New user bio
+   *                 example: baca apa baca apa baca apa baca apa baca apa
    *     responses:
    *       200:
    *         description: User was created successfully!
@@ -70,19 +82,94 @@ module.exports = function (app) {
    *                   description: Result message.
    *                   example: Failed to create user. Please check application log.
    */
-  app.post('/api/register', [verifyUser.checkDuplicateUsername], controller.register);
+  app.post('/v1/api/auth/register', [verifyUser.checkDuplicateEmail], controller.register);
 
-  app.post('/api/sendEmail', controller.sendOTPByEmail);
+  /**
+   * @swagger
+   * /v1/api/auth/sendEmail:
+   *   post:
+   *     tags:
+   *       - Auth Management
+   *     summary: Send Email for account user
+   *     description: Send Email for account user
+   *     responses:
+   *       200:
+   *         description: OTP berhasil dikirim!!
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 message:
+   *                   type: string
+   *                   description: Result message.
+   *                   example: OTP berhasil dikirim!.
+   *       500:
+   *         description: Gagal mengirim email OTP.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 message:
+   *                   type: string
+   *                   description: Result message.
+   *                   example: Gagal mengirim email OTP.
+   */
+  app.post('/v1/api/auth/sendEmail', controller.sendOTPByEmail);
 
-  app.post('/api/verifyEmail', controller.verifyEmail);
+  /**
+   * @swagger
+   * /v1/api/auth/verifyEmail:
+   *   post:
+   *     tags:
+   *       - Auth Management
+   *     summary: Verifikasi Email for account user
+   *     description: Verifikasi Email for account user
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               otp:
+   *                 type: string
+   *                 description: OTP is required
+   *                 example: (otp yang terkirim di email)
+   *     responses:
+   *       200:
+   *         description: OTP berhasil dikirim!!
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 message:
+   *                   type: string
+   *                   description: Result message.
+   *                   example: OTP berhasil dikirim!.
+   *       500:
+   *         description: Gagal mengirim email OTP.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 message:
+   *                   type: string
+   *                   description: Result message.
+   *                   example: Gagal mengirim email OTP.
+   */
+  app.post('/v1/api/auth/verifyEmail', controller.verifyEmail);
 
-  app.get('/auth/google', controller.autentikasiOAuth2);
+  app.get('/v1/api/auth/google', controller.autentikasiOAuth2);
 
-  app.get('/login/oauth2/code/google', controller.callbackautentikasiOauth2);
+  app.get('/v1/api/auth/login/oauth2/code/google', controller.callbackautentikasiOauth2);
 
-  app.post('/auth/resetPassword', controller.resetPassword);
+  app.post('/v1/api/auth/resetPassword', controller.resetPassword);
 
-  app.post('/confirm-reset-password', controller.confirmResetPassword);
+  app.post('/v1/api/auth/confirm-reset-password', controller.confirmResetPassword);
 
   /**
    * @swagger
@@ -165,7 +252,7 @@ module.exports = function (app) {
    *                   description: Result message.
    *                   example: Failed to generate access token. Please check application log.
    */
-  app.post('/api/users/refreshToken', controller.refreshToken);
+  app.post('/v1/api/auth/refreshToken', controller.refreshToken);
 
   /**
    * @swagger
@@ -248,5 +335,5 @@ module.exports = function (app) {
    *                  description: Application error.
    *                  example: Failed to login. Please check application log.
    */
-  app.post('/api/login', MaxRetry, controller.login);
+  app.post('/v1/api/auth/login', MaxRetry, controller.login);
 };

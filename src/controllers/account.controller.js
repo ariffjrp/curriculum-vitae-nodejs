@@ -9,16 +9,16 @@ const { Account } = db;
 
 class AccountController {
   static async updateAccount(req, res) {
+    const {
+      name, email, address, phone, birthdate, gender, bio,
+    } = req.body;
+
     const { error } = updateAccountSchema.validate(req.body);
     if (error) {
       const errorMessage = error.details[0].message;
       logger.warn(`Error occurred: ${errorMessage}`);
       return res.status(400).json({ message: errorMessage });
     }
-
-    const {
-      name, email, address, phone, birthdate, gender, bio,
-    } = req.body;
 
     Account.findOne({
       where: {

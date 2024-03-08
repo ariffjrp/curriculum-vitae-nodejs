@@ -7,6 +7,8 @@
     "dev": "cross-env NODE_ENV=development nodemon server.js",
     "dev-resync": "cross-env NODE_ENV=dev-resync && npx sequelize-cli db:drop --env development --config ./src/config/config.json && npx sequelize-cli db:create --env development --config ./src/config/config.json && npx sequelize-cli db:migrate --env development --config ./src/config/config.json && nodemon server.js",
     "db:migrate": "npx sequelize-cli migration:generate --name create-user && npx sequelize-cli migration:generate --name create-refreshToken && npx sequelize-cli migration:generate --name create-account && npx sequelize-cli migration:generate --name create-certificate && npx sequelize-cli migration:generate --name create-education && npx sequelize-cli migration:generate --name create-intership && npx sequelize-cli migration:generate --name create-portofolio && npx sequelize-cli migration:generate --name create-project && npx sequelize-cli migration:generate --name create-skill",
+    "lint": "eslint ./src/controllers",
+    "fix": "eslint ./src/controllers --fix",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
     "test-resync": "cross-env NODE_ENV=test-resync && npx sequelize-cli db:drop --env test --config ./src/config/config.json && npx sequelize-cli db:create --env test --config ./src/config/config.json && npx sequelize-cli db:migrate --env test --config ./src/config/config.json && jest --testTimeout=10000"
   },
@@ -15,6 +17,7 @@
   "dependencies": {
     "amqplib": "^0.10.3",
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dotenv": "^16.1.4",
     "express": "^4.18.2",
     "express-rate-limit": "^6.8.0",
@@ -24,7 +27,9 @@
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
     "mime-types": "^2.1.35",
+    "moment": "^2.30.1",
     "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3",
     "nodemailer": "^6.9.11",
     "nodemon": "^2.0.22",
     "otplib": "^12.0.1",

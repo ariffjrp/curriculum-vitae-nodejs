@@ -29,6 +29,9 @@ module.exports = (sequelize, DataTypes) => {
       image: {
         type: DataTypes.BLOB,
       },
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     },
     {
       sequelize,

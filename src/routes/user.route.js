@@ -37,7 +37,7 @@ module.exports = function (app) {
    *                   description: Log Out successfully.
    *                   example: Logout successful!
    */
-  app.post('/api/logout', [authJWT.verifyToken], controller.logOut);
+  app.post('/v1/api/user/logout', [authJWT.verifyToken], controller.logOut);
 
   /**
    * @swagger
@@ -129,7 +129,7 @@ module.exports = function (app) {
    *                    description: result message
    *                    example: Gagal mengambil data pengguna. Harap periksa log aplikasi.
    */
-  app.patch('/api/users/updatePassword', [authJWT.verifyToken], controller.updatePassword);
+  app.patch('/v1/api/user/updatePassword', [authJWT.verifyToken], controller.updatePassword);
 
   /**
    * @swagger
@@ -191,7 +191,7 @@ module.exports = function (app) {
    *                    description: result message
    *                    example: Failed to fetch user data. Please check application logs.
    */
-  app.patch('/api/users/updateUsername', [authJWT.verifyToken], controller.updateUsername);
+  app.patch('/v1/api/user/updateUsername', [authJWT.verifyToken], controller.updateUsername);
 
   /**
    * @swagger
@@ -253,5 +253,5 @@ module.exports = function (app) {
    *                    description: Application Error.
    *                    example: Failed to delete account. Please check application log.
    */
-  app.delete('/api/users/deleteUser', [authJWT.verifyToken], controller.deleteAccount);
+  app.delete('/v1/api/user/deleteUser', [authJWT.verifyToken], controller.deleteAccount);
 };

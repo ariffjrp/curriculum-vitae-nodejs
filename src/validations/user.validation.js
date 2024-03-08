@@ -24,11 +24,24 @@ const registerSchema = joi.object({
   name: joi.string().required().messages({
     'any.required': 'Nama harus diisi',
   }),
+  address: joi.string().required().messages({
+    'any.required': 'address harus diisi',
+  }),
+  phone: joi.string().min(10).required().messages({
+    'any.required': 'phone harus diisi',
+    'string.min': 'phone harus memiliki minimal {#limit} karakter',
+  }),
+  gender: joi.string().required().messages({
+    'any.required': 'gender harus diisi',
+  }),
+  bio: joi.string().required().messages({
+    'any.required': 'Bio harus diisi',
+  }),
 });
 
 const loginSchema = joi.object({
-  username: joi.string().required().messages({
-    'any.required': 'Username harus diisi',
+  email: joi.string().required().messages({
+    'any.required': 'Email harus diisi',
   }),
   password: joi.string().required().messages({
     'any.required': 'Password harus diisi',

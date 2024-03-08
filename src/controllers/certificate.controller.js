@@ -2,6 +2,7 @@ const db = require('../models');
 
 const { Certificate } = db;
 const { logger } = require('../utils/logger');
+const { createCertificate } = require('../validations/certificate.validation');
 
 class CertificateController {
   static async CreateCertificate(req, res) {
@@ -10,6 +11,13 @@ class CertificateController {
     } = req.body;
 
     const { userId } = req;
+
+    const { error } = createCertificate.validate(req.body);
+    if (error) {
+      const errorMessage = error.details[0].message;
+      logger.warn(`Error occurred: ${errorMessage}`);
+      return res.status(400).json({ message: errorMessage });
+    }
 
     Certificate.create({
       companyName,

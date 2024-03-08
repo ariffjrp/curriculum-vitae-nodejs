@@ -10,7 +10,7 @@ module.exports = function (app) {
     next();
   });
 
-  app.post('/api/v1/intership', [authJWT.verifyToken], controller.createIntership);
-  app.patch('/api/v1/intership/:id', [authJWT.verifyToken], controller.updateIntership);
-  app.delete('/api/v1/intership/:id', [authJWT.verifyToken], controller.deleteIntership);
+  app.post('/v1/api/intership', [authJWT.verifyToken], controller.createIntership);
+  app.patch('/v1/api/intership/:id', [authJWT.verifyToken], controller.updateIntership);
+  app.delete('/v1/api/intership/:id', [authJWT.verifyToken], controller.deleteIntership);
 };

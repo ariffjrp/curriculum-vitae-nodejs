@@ -10,7 +10,7 @@ module.exports = function (app) {
     next();
   });
 
-  app.post('/api/v1/education', [authJWT.verifyToken], controller.createEducation);
-  app.patch('/api/v1/education/:id', [authJWT.verifyToken], controller.updateEducation);
-  app.delete('/api/v1/education/:id', [authJWT.verifyToken], controller.deleteEducation);
+  app.post('/v1/api/education', [authJWT.verifyToken], controller.createEducation);
+  app.patch('/v1/api/education/:id', [authJWT.verifyToken], controller.updateEducation);
+  app.delete('/v1/api/education/:id', [authJWT.verifyToken], controller.deleteEducation);
 };

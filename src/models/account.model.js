@@ -40,6 +40,9 @@ module.exports = (sequelize, DataTypes) => {
       avatar: {
         type: DataTypes.BLOB,
       },
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     },
     {
       sequelize,

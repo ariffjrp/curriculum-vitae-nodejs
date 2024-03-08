@@ -15,41 +15,49 @@ module.exports = (sequelize, DataTypes) => {
       this.hasOne(RefreshToken, {
         foreignKey: 'userId',
         targetKey: 'id',
+        onDelete: 'CASCADE',
       });
 
       this.hasOne(Account, {
         foreignKey: 'userId',
         targetKey: 'id',
+        onDelete: 'CASCADE',
       });
 
       this.hasMany(Portofolio, {
         foreignKey: 'userId',
         targetKey: 'id',
+        onDelete: 'CASCADE',
       });
 
       this.hasMany(Certificate, {
         foreignKey: 'userId',
         targetKey: 'id',
+        onDelete: 'CASCADE',
       });
 
       this.hasMany(Education, {
         foreignKey: 'userId',
         targetKey: 'id',
+        onDelete: 'CASCADE',
       });
 
       this.hasMany(Intership, {
         foreignKey: 'userId',
         targetKey: 'id',
+        onDelete: 'CASCADE',
       });
 
       this.hasMany(Skill, {
         foreignKey: 'userId',
         targetKey: 'id',
+        onDelete: 'CASCADE',
       });
 
       this.hasMany(Project, {
         foreignKey: 'userId',
         targetKey: 'id',
+        onDelete: 'CASCADE',
       });
     }
   }
@@ -84,6 +92,8 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: 'User',
       paranoid: true,
+      timestamps: true,
+      underscored: true,
     },
   );
 

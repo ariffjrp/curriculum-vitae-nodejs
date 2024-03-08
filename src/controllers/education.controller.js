@@ -1,8 +1,8 @@
-const { body } = require('express-validator');
 const db = require('../models');
 
 const { Education } = db;
 const { logger } = require('../utils/logger');
+const { createEducation } = require('../validations/education.validation');
 
 class EducationController {
   static async createEducation(req, res) {
@@ -11,6 +11,13 @@ class EducationController {
     } = req.body;
 
     const { userId } = req;
+
+    const { error } = createEducation.validate(req.body);
+    if (error) {
+      const errorMessage = error.details[0].message;
+      logger.warn(`Error occurred: ${errorMessage}`);
+      return res.status(400).json({ message: errorMessage });
+    }
 
     Education.create({
       schoolName,

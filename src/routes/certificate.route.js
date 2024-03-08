@@ -10,7 +10,7 @@ module.exports = function (app) {
     next();
   });
 
-  app.post('/api/v1/certificate', [authJWT.verifyToken], controller.CreateCertificate);
-  app.patch('/api/v1/certificate/:id', [authJWT.verifyToken], controller.updateCertificate);
-  app.delete('/api/v1/certificate/:id', [authJWT.verifyToken], controller.deleteCertificate);
+  app.post('/v1/api/certificate', [authJWT.verifyToken], controller.CreateCertificate);
+  app.patch('/v1/api/certificate/:id', [authJWT.verifyToken], controller.updateCertificate);
+  app.delete('/v1/api/v1/certificate/:id', [authJWT.verifyToken], controller.deleteCertificate);
 };

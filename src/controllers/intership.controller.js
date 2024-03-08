@@ -2,6 +2,7 @@ const db = require('../models');
 
 const { Intership } = db;
 const { logger } = require('../utils/logger');
+const { createIntership } = require('../validations/intership.validation');
 
 class IntershipController {
   static async createIntership(req, res) {
@@ -10,6 +11,13 @@ class IntershipController {
     } = req.body;
 
     const { userId } = req;
+
+    const { error } = createIntership.validate(req.body);
+    if (error) {
+      const errorMessage = error.details[0].message;
+      logger.warn(`Error occurred: ${errorMessage}`);
+      return res.status(400).json({ message: errorMessage });
+    }
 
     Intership.create({
       companyName,

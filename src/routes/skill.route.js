@@ -10,7 +10,7 @@ module.exports = function (app) {
     next();
   });
 
-  app.post('/api/v1/skill', [authJWT.verifyToken], controller.CreateSkill);
-  app.patch('/api/v1/skill/:id', [authJWT.verifyToken], controller.UpdateSkill);
-  app.delete('/api/v1/skill/:id', [authJWT.verifyToken], controller.DeleteSkill);
+  app.post('/v1/api/skill', [authJWT.verifyToken], controller.CreateSkill);
+  app.patch('/v1/api/skill/:id', [authJWT.verifyToken], controller.UpdateSkill);
+  app.delete('/v1/api/skill/:id', [authJWT.verifyToken], controller.DeleteSkill);
 };

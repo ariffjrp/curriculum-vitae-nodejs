@@ -17,13 +17,13 @@ CORS_PORT=8001
 # DB Config
 DB_HOST = localhost
 DB_USER = postgres
-DB_PASSWORD = dewa1234
+DB_PASSWORD = 
 DB_DATABASE = curriculum_vitae
 
 # DB Test
 DB_HOST_TEST = localhost
 DB_USER_TEST = postgres
-DB_PASSWORD_TEST = dewa1234
+DB_PASSWORD_TEST = 
 DB_DATABASE_TEST = curriculum_vitae_test
 
 # Authentication
@@ -32,8 +32,8 @@ JWT_EXPIRATION = 86400
 JWT_REFRESH = 604800
 
 # Mail sedder
-MAIL_USERNAME = creativesoul290@gmail.com
-MAIL_PASSWORD = rmeavtfoksaqpnyu
+MAIL_USERNAME = 
+MAIL_PASSWORD = 
 MAIL_HOST = smtp.gmail.com
 MAIL_PORT = 587
 
@@ -44,8 +44,8 @@ SESSION_SECRET = curriculum-vitae-secret-key
 OTP_SECRET = curriculum-vitae-secret-key
 
 #OAuth2
-GOOGLE_CLIENT_ID = 392538975465-6bvfi22hsis5b1gijorual81ee63u5qv.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET = 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
+GOOGLE_CLIENT_ID = 
+GOOGLE_CLIENT_SECRET = 
 ```
 
 ### Installing

@@ -253,5 +253,5 @@ module.exports = function (app) {
    *                    description: Application Error.
    *                    example: Failed to delete account. Please check application log.
    */
-  app.delete('/v1/api/user/deleteUser', [authJWT.verifyToken], controller.deleteAccount);
+  app.patch('/v1/api/user/deleteUser', [authJWT.verifyToken], controller.deleteAccount);
 };

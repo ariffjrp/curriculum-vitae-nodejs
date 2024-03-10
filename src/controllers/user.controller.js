@@ -142,22 +142,20 @@ class UserController {
   }
 
   static async deleteAccount(req, res) {
-    const { userId } = req; // Get user ID from access token
+    const { userId } = req;
 
     try {
-      const user = await User.findByPk(userId);
+      const [rowsAffected, [user]] = await User.update(
+        { deletedAt: new Date() },
+        { where: { id: userId }, returning: true },
+      );
 
-      if (!user) {
+      if (rowsAffected === 0 || !user) {
         logger.warn('User not found.');
         return res.status(404).send({
           message: 'User not found.',
         });
       }
-
-      user.deleted_at = new Date();
-      await user.save();
-
-      logger.info('user deleted ad', user);
 
       res.status(200).send({
         message: 'Account marked for deletion. It will be permanently deleted after the recovery period.',

@@ -13,9 +13,7 @@ const passport = require('./src/config/googleOAuth2.config');
 const app = express();
 
 const corsOptions = {
-  origin: '*',
-  credentials: true,
-  methods: ['OPTIONS', 'GET', 'POST', 'PUT', 'DELETE'],
+  origin: process.env.CORS_PORT,
 };
 
 app.use(cors(corsOptions));
